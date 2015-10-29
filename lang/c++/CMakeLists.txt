@@ -20,6 +20,8 @@ cmake_minimum_required (VERSION 2.6)
 
 set (CMAKE_LEGACY_CYGWIN_WIN32 0)
 
+link_directories("/lib64")
+
 if (NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
     set (CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
 endif()
@@ -92,11 +94,11 @@ set_target_properties (avrocpp PROPERTIES
 set_target_properties (avrocpp_s PROPERTIES
     VERSION ${AVRO_VERSION_MAJOR}.${AVRO_VERSION_MINOR})
 
-target_link_libraries (avrocpp ${Boost_LIBRARIES})
+target_link_libraries (avrocpp ${Boost_LIBRARIES} pthread)
 
 add_executable (precompile test/precompile.cc)
 
-target_link_libraries (precompile avrocpp_s ${Boost_LIBRARIES})
+target_link_libraries (precompile avrocpp_s ${Boost_LIBRARIES} pthread)
 
 macro (gen file ns)
     add_custom_command (OUTPUT ${file}.hh
@@ -121,7 +123,7 @@ gen (reuse ru)
 gen (circulardep cd)
 
 add_executable (avrogencpp impl/avrogencpp.cc)
-target_link_libraries (avrogencpp avrocpp_s ${Boost_LIBRARIES})
+target_link_libraries (avrogencpp avrocpp_s ${Boost_LIBRARIES} pthread)
 
 enable_testing()
 
