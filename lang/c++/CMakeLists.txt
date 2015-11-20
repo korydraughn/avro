@@ -18,6 +18,13 @@
 #
 cmake_minimum_required (VERSION 2.6)
 
+# use, i.e. don't skip the full RPATH for the build tree
+SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+
+# when building, don't use the install RPATH already
+# (but later on when installing)
+SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+
 set (CMAKE_LEGACY_CYGWIN_WIN32 0)
 
 link_directories("/lib64")
