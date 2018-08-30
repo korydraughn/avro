@@ -1,0 +1,22 @@
+#! /bin/bash
+
+clang_inc_dir=/opt/irods-externals/clang6.0-0/include/c++/v1
+
+LIB_PATH="-L/opt/irods-externals/clang6.0-0/lib"
+
+cmake -G"Unix Makefiles" \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_C_COMPILER=clang \
+      -DCMAKE_CXX_COMPILER=clang++ \
+      -DCMAKE_CXX_FLAGS="-std=c++17 -stdlib=libc++ -I${clang_inc_dir}" \
+      -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=TRUE \
+      -DCMAKE_BUILD_RPATH="/opt/irods-externals/clang-runtime6.0-0/lib;/opt/irods-externals/boost1.67.0-0/lib" \
+      -DCMAKE_EXE_LINKER_FLAGS="$LIB_PATH -lc++abi" \
+      -DCMAKE_SHARED_LINKER_FLAGS="$LIB_PATH -lc++abi" \
+      -DCMAKE_MODULE_LINKER_FLAGS="$LIB_PATH -lc++abi" \
+      -DBOOST_ROOT=/opt/irods-externals/boost1.67.0-0 \
+      ..
+
+make -j4 avrocpp avrocpp_s avrogencpp
+cp avrogencpp dist/bin
+cp libavrocpp_s.a libavrocpp.so.1.9.0-SNAPSHOT.0 dist/lib/
